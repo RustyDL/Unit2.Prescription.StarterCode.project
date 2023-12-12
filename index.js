@@ -1,19 +1,21 @@
 /**
  * Calculates the total cost of all refills.
- * @param {number} pricePerRefill
- * @param {number} refills
- * @returns {number} total cost of all refills
+ * @param {number} pricePerRefill - The price per refill.
+ * @param {number} refills - The number of refills.
+ * @returns {number} The total cost of all refills.
  */
 function getTotalCost(pricePerRefill, refills) {
+  // Calculate the total cost by multiplying the price per refill with the number of refills.
   return pricePerRefill * refills;
 }
+
 
 /**
  * If the customer has a subscription, apply a 25% discount
  * to the total cost of the refills.
- * @param {number} totalCostWithoutDiscounts
- * @param {boolean} isSubscribed whether the user has a subscription
- * @returns {number} total cost with subscription discount
+ * @param {number} totalCostWithoutDiscounts - The total cost without any discounts.
+ * @param {boolean} isSubscribed - Whether the user has a subscription.
+ * @returns {number} The total cost with a subscription discount.
  */
 function applyDiscount(totalCostWithoutDiscounts, isSubscribed) {
   return totalCostWithoutDiscounts * (isSubscribed ? 0.75 : 1);
@@ -22,17 +24,16 @@ function applyDiscount(totalCostWithoutDiscounts, isSubscribed) {
 /**
  * If the customer has a coupon, apply a $10 discount to
  * the total cost of the refills after the subscription discount.
- * @param {number} costAfterSubscription
- * @param {boolean} hasCoupon whether the customer is using a coupon
- * @returns
+ * @param {number} costAfterSubscription - The total cost after applying the subscription discount.
+ * @param {boolean} hasCoupon - Whether the customer is using a coupon.
+ * @returns {number} The total cost with a coupon discount.
  */
 function applyCoupon(costAfterSubscription, hasCoupon) {
   return costAfterSubscription - (hasCoupon ? 10 : 0);
 }
 
 /**
- * Calculates the cost of a subscription based on input values
- * and displays the result on the page.
+ * Calculates the cost based on input values and displays the result on the page.
  */
 function calculateCost() {
   const pricePerRefill = document.querySelector("#price");
@@ -43,16 +44,15 @@ function calculateCost() {
   const output = document.querySelector("#cost");
 
   const initialCost = getTotalCost(parseFloat(pricePerRefill.value), parseInt(refills.value, 10));
-  const costAfterSubscription = applyDiscount(
-    initialCost,
-    subscription.checked
-  );
+  const costAfterSubscription = applyDiscount(initialCost, subscription.checked);
   const finalCost = applyCoupon(costAfterSubscription, coupon.checked);
 
   output.textContent = `$${finalCost.toFixed(2)}`;
 }
 
+// Check if the code is running in a Node.js environment (e.g., during testing)
 if (typeof module !== "undefined") {
+  // Export functions for testing in Node.js
   module.exports = {
     getTotalCost,
     applyDiscount,
@@ -60,10 +60,10 @@ if (typeof module !== "undefined") {
     calculateCost,
   };
 } else {
-  const calculateButton = document.querySelector("#calculate");
-  calculateButton.addEventListener("click", calculateCost);
+// Set up event listener for the DOM interaction in a browser environment
+const calculateButton = document.querySelector("#calculate");
+calculateButton.addEventListener("click", calculateCost);
 }
-
 const {
   getTotalCost,
   applyDiscount,
@@ -97,9 +97,8 @@ describe('applyCoupon', () => {
   });
 });
 
-// This is a sample test for the DOM interaction. Make sure to adjust it based on your actual HTML structure.
 describe('calculateCost (DOM interaction)', () => {
-  test('updates the output element with the correct final cost', () => {
+  beforeEach(() => {
     document.body.innerHTML = `
       <input type="number" id="price" value="5">
       <input type="number" id="refills" value="3">
@@ -108,10 +107,17 @@ describe('calculateCost (DOM interaction)', () => {
       <button id="calculate"></button>
       <div id="cost"></div>
     `;
-
+  });
+  
+  test('updates the output element with the correct final cost', () => {
     calculateCost();
 
     const output = document.querySelector("#cost");
     expect(output.textContent).toContain('27.75');
   });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
 });
+

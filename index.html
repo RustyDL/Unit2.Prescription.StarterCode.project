@@ -33,6 +33,37 @@
         <output id="cost">$0.00</output>
       </label>
     </main>
+
     <script src="index.js"></script>
+    <script>
+      const { getTotalCost, applyDiscount, applyCoupon } = require('./index');
+
+      const calculateButton = document.querySelector("#calculate");
+
+      calculateButton.addEventListener("click", () => {
+        const pricePerRefill = parseFloat(document.querySelector("#price").value);
+        const refills = parseInt(document.querySelector("#refills").value, 10);
+        const isSubscribed = document.querySelector("#subscribed").checked;
+        const hasCoupon = document.querySelector("#coupon").checked;
+
+        // Check if values are valid
+        if (isNaN(pricePerRefill) || isNaN(refills)) {
+          alert("Please enter valid values for price and refills.");
+          return;
+        }
+
+        // Calculate the initial cost without any discounts.
+        const initialCost = getTotalCost(pricePerRefill, refills);
+
+        // Apply the subscription discount.
+        const costAfterSubscription = applyDiscount(initialCost, isSubscribed);
+
+        // Apply the coupon discount.
+        const finalCost = applyCoupon(costAfterSubscription, hasCoupon);
+
+        // Display the final cost on the page.
+        document.querySelector("#cost").textContent = `$${finalCost.toFixed(2)}`;
+      });
+    </script>
   </body>
 </html>
