@@ -59,6 +59,29 @@ describe("getTotalCost()", () => {
     });
   });
 
+  describe("applyDiscount()", () => {
+    it("applies a 25% discount when subscribed", () => {
+      expect(applyDiscount(100, true)).toBe(75);
+    });
+  
+    it("does not apply a discount when not subscribed", () => {
+      expect(applyDiscount(100, false)).toBe(100);
+    });
+
+  });
+
+  describe("applyCoupon()", () => {
+    it("applies a $10 coupon when the customer has a coupon", () => {
+      expect(applyCoupon(100, true)).toBe(90);
+    });
+  
+    it("does not apply a coupon when the customer does not have a coupon", () => {
+      expect(applyCoupon(100, false)).toBe(100);
+    });
+  
+    // Add more test cases as needed
+  });
+
   // NOTE: These tests will fail - why?
   describe.skip("handles unexpected input", () => {
     it("returns 0 if either argument is not a number", () => {

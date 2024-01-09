@@ -46,31 +46,31 @@ function resetDOM() {
 describe("The document", () => {
   beforeEach(resetDOM);
 
-  test("contains fields for a user to input price, refills, subscription status, and coupon status", () => {
-    const price = queryByRole(document, "spinbutton", { name: /price/i });
-    expect(price).not.toBe(null);
-
-    const refills = queryByRole(document, "spinbutton", { name: /refills/i });
-    expect(refills).not.toBe(null);
-
-    const subscribed = queryByRole(document, "checkbox", {
+  test("displays the correct cost for the user's input values after clicking the calculate button", () => {
+    const priceInput = getByRole(document, "spinbutton", { name: /price/i });
+    const subscribedCheckbox = getByRole(document, "checkbox", {
       name: /subscribed/i,
     });
-    expect(subscribed).not.toBe(null);
-
-    const coupon = queryByRole(document, "checkbox", { name: /coupon/i });
-    expect(coupon).not.toBe(null);
-
-    const calculate = queryByRole(document, "button", { name: /calculate/i });
-    expect(calculate).not.toBe(null);
+    const calculateButton = getByRole(document, "button", {
+      name: /calculate/i,
+    });
+    const costOutput = getByRole(document, "status", { name: /total cost/i });
+  
+    // Set input values
+    priceInput.value = "20";
+    subscribedCheckbox.checked = true;
+  
+    calculateButton.click();
+  
+    // Check the correct value
+    expect(costOutput.textContent).toBe("$15.00");
   });
-
+  
   test("displays $0.00 initially", () => {
     const cost = queryByText(document, "$0.00");
     expect(cost).not.toBe(null);
   });
 
-  // TODO: Complete this test case so it is testing the described behavior.
   test("displays the correct cost for the user's input values after clicking the calculate button", () => {
     const price = getByRole(document, "spinbutton", { name: /price/i });
     const subscribed = getByRole(document, "checkbox", {

@@ -35,19 +35,16 @@ function applyCoupon(costAfterSubscription, hasCoupon) {
  * and displays the result on the page.
  */
 function calculateCost() {
-  const pricePerRefill = document.querySelector("#price");
-  const refills = document.querySelector("#refills");
-  const subscription = document.querySelector("#subscribed");
-  const coupon = document.querySelector("#coupon");
+  const pricePerRefill = parseFloat(document.querySelector("#price").value);
+  const refills = parseInt(document.querySelector("#refills").value);
+  const subscription = document.querySelector("#subscribed").checked;
+  const coupon = document.querySelector("#coupon").checked;
 
   const output = document.querySelector("#cost");
 
-  const initialCost = getTotalCost(pricePerRefill.value, refills.value);
-  const costAfterSubscription = applyDiscount(
-    initialCost,
-    subscription.checked
-  );
-  const finalCost = applyCoupon(costAfterSubscription, coupon.checked);
+  const initialCost = getTotalCost(pricePerRefill, refills);
+  const costAfterSubscription = applyDiscount(initialCost, subscription);
+  const finalCost = applyCoupon(costAfterSubscription, coupon);
 
   output.textContent = `$${finalCost.toFixed(2)}`;
 }
